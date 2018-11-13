@@ -1,10 +1,6 @@
-#!/bin/python
-
-import codecs
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.svm import LinearSVC
 from sklearn.metrics import accuracy_score
-import pprint
 import pickle
 
 def load_data(classes=['pos', 'neg'], dataset='smiley'):
