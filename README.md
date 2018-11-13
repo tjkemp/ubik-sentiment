@@ -22,11 +22,12 @@ Anna lause: Pahemmastakin suosta on noustu
 
 ```
 
-### Installation
+Installation
+--------------
 
-### Creating training and test data
+Create some training and test data if you don't have it already.
 
-First, get some raw smiley data:
+To get some finnish language raw smiley data from Korppi:
 
 ```sh
 $ cd data
@@ -43,7 +44,7 @@ $ generate_trainingsets.sh
 
 ```
 
-#### Creating the model
+Next creating a model.
 
 Note that example output below is created with just hundreds of rows of training data hence the bad results.
 
@@ -82,9 +83,7 @@ Done.
 
 ```
 
-#### Testing the model
-
-Testing a sentence with the model is easy:
+Finally try the model a sentence:
 
 ```sh
 
@@ -93,8 +92,9 @@ $ python test_sentence.py
 ```
 
 
-### Author
+Author
+-------
 
- - [tjkemp](https://github.com/tjkemp)
+- [tjkemp](https://github.com/tjkemp)
 
 Distributed under the MIT license. See ``license.txt`` for more information.
