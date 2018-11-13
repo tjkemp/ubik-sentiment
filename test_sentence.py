@@ -1,19 +1,22 @@
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.svm import LinearSVC
 from sklearn.metrics import accuracy_score
-import pickle
+from sklearn.externals import joblib
 
-# load previously generated vectorizer and classifier
-with open('test/vectorizer.pickle', 'rb') as f:
-    vectorizer = pickle.load(f)
-with open('test/classifier.pickle', 'rb') as f:
-    classifier = pickle.load(f)
+def main():
 
-while (True):
-    sentence = raw_input("Anna lause: ")
+    # load previously generated vectorizer and classifier
+    vectorizer = joblib.load('model/vectorizer.joblib')
+    classifier = joblib.load('model/classifier.joblib')
 
-    predict_vector = vectorizer.transform([sentence])
+    while (True):
+        sentence = input("Anna lause: ")
 
-    prediction = classifier.predict(predict_vector)
+        predict_vector = vectorizer.transform([sentence])
 
-    print (prediction)
+        prediction = classifier.predict(predict_vector)
+
+        print(prediction)
+
+if __name__ == "__main__":
+    main()

@@ -1,7 +1,8 @@
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.svm import LinearSVC
 from sklearn.metrics import accuracy_score
-import pickle
+from sklearn.externals import joblib
+import codecs
 
 def load_sentences(dataset='Turku'):
     sentences = []
@@ -10,23 +11,29 @@ def load_sentences(dataset='Turku'):
 
     return sentences
 
-# load previously generated vectorizer and classifier
-with open('test/vectorizer.pickle', 'rb') as f:
-    vectorizer = pickle.load(f)
-with open('test/classifier.pickle', 'rb') as f:
-    classifier = pickle.load(f)
+def main():
+    #
+    # NOTE: this file is under development
+    #
 
-# load sentences to predict
-datasets = ['Rauma', 'Kotka', 'Lappeenranta', 'Rovaniemi']
+    # load previously generated vectorizer and classifier
+    vectorizer = joblib.load('model/vectorizer.joblib')
+    classifier = joblib.load('model/classifier.joblib')
 
-for dataset in datasets:
-    predict_sentences = load_sentences(dataset=dataset)
+    # load sentences to predict
+    datasets = ['Rauma', 'Kotka', 'Lappeenranta', 'Rovaniemi']
 
-    predict_vectors = vectorizer.transform(predict_sentences)
+    for dataset in datasets:
+        predict_sentences = load_sentences(dataset=dataset)
 
-    predictions = classifier.predict(predict_vectors)
-    pred_pos = (predictions == 'pos').sum()
-    pred_neg = (predictions == 'neg').sum()
+        predict_vectors = vectorizer.transform(predict_sentences)
 
-    print("Dataset {} has {} positive and {} negative sentences with positivity % of {:.2f}.").format(
-        dataset, pred_pos, pred_neg, (float(pred_pos) / (pred_pos+pred_neg))*100)
+        predictions = classifier.predict(predict_vectors)
+        pred_pos = (predictions == 'pos').sum()
+        pred_neg = (predictions == 'neg').sum()
+
+        print("Dataset {} has {} positive and {} negative sentences with positivity % of {:.2f}.").format(
+            dataset, pred_pos, pred_neg, (float(pred_pos) / (pred_pos+pred_neg))*100)
+
+if __name__ == "__main__":
+    main()
