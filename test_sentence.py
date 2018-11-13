@@ -8,9 +8,9 @@ import pprint
 import pickle
 
 # load previously generated vectorizer and classifier
-with open('vectorizer.pickle', 'rb') as f:
+with open('test/vectorizer.pickle', 'rb') as f:
     vectorizer = pickle.load(f)
-with open('classifier.pickle', 'rb') as f:
+with open('test/classifier.pickle', 'rb') as f:
     classifier = pickle.load(f)
 
 while (True):

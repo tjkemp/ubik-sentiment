@@ -51,8 +51,8 @@ print ("Best C value is %s with the accuracy of %s." % (c_best,score_best))
 
 # save the best classifier
 print ("Saving vectorizer and classifier...")
-with open('vectorizer.pickle', 'wb') as f:
+with open('model/vectorizer.pickle', 'wb') as f:
     pickle.dump(vectorizer, f, pickle.HIGHEST_PROTOCOL)
-with open('classifier.pickle', 'wb') as f:
+with open('model/classifier.pickle', 'wb') as f:
     pickle.dump(classifier_best, f, pickle.HIGHEST_PROTOCOL)
 print ("Done.")
