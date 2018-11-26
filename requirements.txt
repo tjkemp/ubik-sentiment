@@ -1,5 +1,4 @@
 requests
-pickle
 numpy
 scipy
 scikit-learn
