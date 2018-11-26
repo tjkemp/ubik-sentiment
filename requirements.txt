@@ -1,11 +1,5 @@
-<<<<<<< HEAD
 requests
-<<<<<<< Updated upstream
 pickle
-=======
 numpy
 scipy
->>>>>>> 6b758bf9fa519f6991cd1b6ef0486fd59a6d59f8
-=======
->>>>>>> Stashed changes
 scikit-learn
