@@ -1,14 +1,15 @@
 Ubik Sentiment repository
 =========================
 
-This project creates a simple model to classify positivity or negativity of a given sentence. 
+This project creates a simple machine learning model to classify positive or negative emotion
+of a given sentence. 
 
-The training data could be got from anywhere but it should be a list of sentences annotated as
-either positive or negative.
+In this example the training data is in finnish and generated from Korppi with a simple
+heuristic. The corpus API is searched for sentences containing happy smile ':)' and sad
+smileys ':(' which are assumed to note for positive and negative sentiments respectively.
 
-In this example the training data generated from Korppi data with a simpler heuristic. The corpus
-API is searched for sentences containing happy smile ':)' and sad smileys ':(' which we are assumed
-to be positive and negative sentences respectively and thus note for positive or negative sentiments.
+To evaluate the model's feasibility for real world use a simple annotation tool is created to
+annotate data for evaluation.
 
 A cli tool is provided the test a sentence:
 
@@ -22,31 +23,45 @@ Anna lause: Pahemmastakin suosta on noustu
 
 ```
 
-Installation
---------------
+# Installation
 
 Create some training and test data if you don't have it already.
 
 To get some finnish language raw smiley data from Korppi:
 
 ```sh
-$ cd data
 
-$ python fetch_rawdata.py
+$ python fetch_rawdata.py > korp_all_sentences.txt
 
 ```
 
-Then process it to training and test data:
+Then process it to create training and development sets and data to annotate into evaluation set:
 
 ```sh
 
-$ generate_trainingsets.sh
+$ generate_sets.sh
 
 ```
 
-Next creating a model.
+Then process it to create training and development sets and data to annotate into evaluation set:
+If you want to create human annotated evaluation set, use annotate.py:
 
-Note that example output below is created with just hundreds of rows of training data hence the bad results.
+```sh
+
+$ python annotate.py
+To annotate lines, press p for positive, n for negative, any other letter to discard. Q to quit.
+
+siis koitas perheen kans vaikkapa ihan perinteistä munien maalaamista
+pos
+leivo jotain tai saahan sitä kaupoista valmistakin
+quit
+
+Annotated 1 positives and 0 negative sentences. Discarded 0 rows.
+In total 1 sentences have been processed.
+
+```
+
+Next create the model.
 
 ```sh
 
@@ -54,28 +69,8 @@ $ python train_classifier.py
 
 Creating a vectorizer...
 Vectorizing training set...
-Vectorizing test set...
+Vectorizing development set...
 Evaluating the best hyperparameter C...
-With C = 0.0009765625 test set accuracy: 0.6633333333333333.
-With C = 0.001953125 test set accuracy: 0.6616666666666666.
-With C = 0.00390625 test set accuracy: 0.6633333333333333.
-With C = 0.0078125 test set accuracy: 0.665.
-With C = 0.015625 test set accuracy: 0.67.
-With C = 0.03125 test set accuracy: 0.67.
-With C = 0.0625 test set accuracy: 0.67.
-With C = 0.125 test set accuracy: 0.67.
-With C = 0.25 test set accuracy: 0.6683333333333333.
-With C = 0.5 test set accuracy: 0.6716666666666666.
-With C = 1 test set accuracy: 0.67.
-With C = 2 test set accuracy: 0.6566666666666666.
-With C = 4 test set accuracy: 0.655.
-With C = 8 test set accuracy: 0.6533333333333333.
-With C = 16 test set accuracy: 0.6583333333333333.
-With C = 32 test set accuracy: 0.6533333333333333.
-With C = 64 test set accuracy: 0.6533333333333333.
-With C = 128 test set accuracy: 0.6516666666666666.
-With C = 256 test set accuracy: 0.6566666666666666.
-With C = 512 test set accuracy: 0.6566666666666666.
 
 Best C value is 0.5 with the accuracy of 0.6716666666666666.
 Saving vectorizer and classifier...
@@ -83,7 +78,7 @@ Done.
 
 ```
 
-Finally try the model a sentence:
+Finally try the model with a sentence.
 
 ```sh
 
@@ -91,9 +86,20 @@ $ python test_sentence.py
 
 ```
 
+# Work definitions for positive and negative emotions
 
-Author
--------
+For purposes of manual annotation of evaluation data the following definition was used:
+
+Negative sentiment contains
+ - negative emotions such as anger or sadness
+ - anti-social behaviour such as judging or belittling others
+ - contains cursing or vulgarity
+
+Positive sentiment contains
+ - positive emotions such as excitement or happiness
+ - encouraging, hopeful or helpful behaviour
+ 
+# Author
 
 - [tjkemp](https://github.com/tjkemp)
 
