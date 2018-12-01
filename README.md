@@ -1,17 +1,18 @@
-Ubik Sentiment repository
-=========================
+Ubik Sentiment
+===============
 
-This project creates a simple machine learning model to classify positive or negative emotion
-of a given sentence. 
+The project creates a simple machine learning model to classify positive or negative 
+emotion of a given sentence. 
 
-In this example the training data is in finnish and generated from Korppi with a simple
-heuristic. The corpus API is searched for sentences containing happy smile ':)' and sad
-smileys ':(' which are assumed to note for positive and negative sentiments respectively.
+The training data is in finnish and generated from Korppi with a simple heuristic. 
+[Korppi](https://korp.csc.fi/) corpus API is searched for sentences containing happy
+smile  ':)' and sad smileys ':(' which are assumed to note for positive and negative 
+sentiments respectively.
 
-To evaluate the model's feasibility for real world use a simple annotation tool is created to
-annotate data for evaluation.
+To evaluate the model's feasibility for real world use a simple annotation tool is
+can be used to annotate data for evaluation. 
 
-A cli tool is provided the test a sentence:
+A cli tool is provided the test the sentiment of a sentence:
 
 ```sh
 $ python test_sentence.py
