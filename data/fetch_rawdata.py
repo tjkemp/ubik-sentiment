@@ -6,7 +6,7 @@ def collect_data():
     # example query:
     # https://korp.csc.fi/cgi-bin/korp.cgi?command=query&defaultcontext=1+text&defaultwithin=text&show=sentence,paragraph,lemma&show_struct=text_title,text_date,text_time,text_sect,text_sub,text_user,sentence_id,text_urlmsg,text_urlboard&start=0&end=9&corpus=S24&cqp=%5Blemma+%3D+%22Ruotsi%22%5D&cqp1=%5Blemma+%3D+%22Suomi%22%5D&indent=2
 
-    cqp_query = '([word = "\:\)"]|[word = "\:\("])' # :, ( and ) characters are escaped with \
+    cqp_query = '([word = "\:\)"]|[word = "\:\("])' # :, ( and ) characters are escaped with backslash
 
     extra = '&defaultcontext=1+sentence&defaultwithin=sentence&show=sentence,paragraph,lemma,pos&show_struct=sentence_id&start=0&end=100000'
 
