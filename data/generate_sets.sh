@@ -11,7 +11,7 @@ tempfile_devel=$(mktemp)
 tempfile_eval=$(mktemp)
 
 # 1. remove lines with only either :) or :( smiley and then shuffle data
-cat korp_all_sentences.txt | grep -Pv "^:\)$|^:\($" > ${tempfile_clean}
+cat korp_all_sentences.txt | grep -Pv "^:\)$|^:\($" | shuf --output=${tempfile_clean}
 
 # 2. divide the data to training set (1/2) and development set (1/4)
 # and a set from which to annotate an evaluation set (1/4)
