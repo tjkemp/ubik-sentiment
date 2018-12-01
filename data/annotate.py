@@ -1,6 +1,6 @@
 import sys
 import readchar
-from colorama
+import colorama
 
 def main(num_line_start):
     """ Processes predefined file and asks the user for annotation each row as either positive
@@ -51,8 +51,7 @@ def main(num_line_start):
             file_output_pos.write(line)
             positives += 1
         elif char == 'n':
-            print(colorama.Fore.RED + "pos")
-            print("neg")
+            print(colorama.Fore.RED + "neg")
             file_output_neg.write(line)
             negatives += 1
         elif char == 'q':
@@ -60,7 +59,6 @@ def main(num_line_start):
             break
         else:
             print(colorama.Fore.BLUE + "discarded")
-            print("discarded")
             file_output_discarded.write(line)
             discarded += 1
 
