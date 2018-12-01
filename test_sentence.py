@@ -12,7 +12,10 @@ def main():
     while (True):
         sentence = input("Anna lause: ")
 
-        predict_vector = vectorizer.transform([sentence])
+        if len(sentence) == 0:
+            break
+
+        predict_vector = vectorizer.transform([sentence]).toarray()
 
         prediction = classifier.predict(predict_vector)
 
