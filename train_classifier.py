@@ -1,8 +1,11 @@
+import sys
+import codecs
+import importlib
+import warnings
 from sklearn.svm import LinearSVC
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics import accuracy_score
 from sklearn.externals import joblib
-import codecs
 
 def load_data(classes=['pos', 'neg'], dataset='unknown', limit=1000):
     sentences = []
@@ -18,12 +21,16 @@ def load_data(classes=['pos', 'neg'], dataset='unknown', limit=1000):
 
     return sentences, labels
 
-def main():
-    # load data sets
-    train_sentences, train_labels = load_data(dataset='korp_train')
-    test_sentences, test_labels = load_data(dataset='korp_devel')
+def main(limit=1000, c=None):
 
-    print("Found {} training sentences, {} test sentences.".format(len(train_sentences), len(test_sentences)))
+    # supress deprecation warnings by joblib
+    warnings.simplefilter('ignore')
+    
+    # load data sets
+    train_sentences, train_labels = load_data(dataset='korp_train', limit=limit)
+    devel_sentences, devel_labels = load_data(dataset='korp_devel', limit=limit)
+
+    print("Found {} training sentences, {} test sentences.".format(len(train_sentences), len(devel_sentences)))
 
     # convert sentences to feature vectors
     print ("Creating a vectorizer...")
@@ -33,26 +40,34 @@ def main():
     print ("Vectorizing training set...")
     train_vectors = vectorizer.transform(train_sentences).toarray()
     print ("Vectorizing test set...")
-    test_vectors = vectorizer.transform(test_sentences).toarray()
+    devel_vectors = vectorizer.transform(devel_sentences).toarray()
 
     # test for the best classifier
     score_best = 0.0
     c_best = -1
     classifier_best = None
-    print ("Evaluating the best hyperparameter C...")
-    for i in range (-10, 10):
-        c = 2**i
-        classifier = LinearSVC(C=c)
+
+    # if not given, search for the best hyperparameter
+    if c == None:
+        print ("Evaluating the best hyperparameter C...")
+        hyperparameters = [2**i for i in range(-10, 10)]
+    else:
+        hyperparameters = [c]
+
+    for hyper in hyperparameters:
+        classifier = LinearSVC(C=hyper)
         classifier.fit(train_vectors, train_labels)
         score_train = accuracy_score(train_labels, classifier.predict(train_vectors))
-        score_test = accuracy_score(test_labels, classifier.predict(test_vectors))
-        if score_test > score_best:
-            c_best = c
-            score_best = score_test
+        score_devel = accuracy_score(devel_labels, classifier.predict(devel_vectors))
+        if score_devel > score_best:
+            c_best = hyper
+            score_best = score_devel
+            score_train = score_train
             classifier_best = classifier
-        print ("With C = %s with test set accuracy: %s (and training set accuracy: %s)." % (c, score_test, score_train))
+        if len(hyperparameters) > 1:
+            print(f"If C = {hyper}, accuracy: {score_devel:.3f} (devel), {score_train:.3f} (training).")
 
-    print ("Best C value is %s with the accuracy of %s." % (c_best, score_best))
+    print (f"For C value {c_best} the accuracy is {score_best:.3f} (devel), {score_train:.3f} (training).")
 
     # save the best classifier
     print ("Saving vectorizer and classifier...")
@@ -61,4 +76,11 @@ def main():
     print ("Done.")
 
 if __name__ == "__main__":
-    main()
+    if len(sys.argv) == 3:
+        limit = int(sys.argv[1])
+        param = float(sys.argv[2])
+        main(limit=limit, c=param)
+    elif len(sys.argv) == 2:
+        main(limit=int(sys.argv[1]))
+    else:
+        print("Usage: python train_classifier.py <class_max_length> <hyperparameter>")
