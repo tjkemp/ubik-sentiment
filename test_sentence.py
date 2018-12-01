@@ -10,7 +10,7 @@ def main():
     classifier = joblib.load('model/classifier.joblib')
 
     while (True):
-        sentence = input("Anna lause: ")
+        sentence = input("Give a sentence: ")
 
         if len(sentence) == 0:
             break
