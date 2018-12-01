@@ -67,12 +67,15 @@ Next create the model.
 
 $ python train_classifier.py
 
+Warning: enforcing limit of 10000 samples to dataset ./data/korp_train_pos.txt
+Warning: enforcing limit of 10000 samples to dataset ./data/korp_devel_pos.txt
+Found 14768 training sentences, 12330 development testing sentences.
 Creating a vectorizer...
 Vectorizing training set...
 Vectorizing development set...
 Evaluating the best hyperparameter C...
 
-Best C value is 0.5 with the accuracy of 0.6716666666666666.
+Best C value is 0.03125 with the accuracy of 0.8261151662611517.
 Saving vectorizer and classifier...
 Done.
 
@@ -92,7 +95,8 @@ For purposes of manual annotation of evaluation data the following definition wa
 
 Negative sentiment contains
  - negative emotions such as anger or sadness
- - anti-social behaviour such as judging or belittling others
+ - uncertainty, confusion
+ - anti-social behaviour such as judging, calling names or insulting others
  - contains cursing or vulgarity
 
 Positive sentiment contains
