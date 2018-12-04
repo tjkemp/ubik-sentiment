@@ -2,7 +2,7 @@ import sys
 import codecs
 import importlib
 import warnings
-from sklearn.svm import LinearSVC
+from sklearn.naive_bayes import MultinomialNB
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics import accuracy_score
 from sklearn.externals import joblib
@@ -21,7 +21,7 @@ def load_data(classes=['pos', 'neg'], dataset='unknown', limit=1000):
 
     return sentences, labels
 
-def main(limit=1000, c=None):
+def main(limit=1000):
 
     # supress deprecation warnings by joblib
     warnings.simplefilter('ignore')
@@ -42,45 +42,21 @@ def main(limit=1000, c=None):
     print ("Vectorizing test set...")
     devel_vectors = vectorizer.transform(devel_sentences).toarray()
 
-    # test for the best classifier
-    score_best = 0.0
-    c_best = -1
-    classifier_best = None
+    classifier = MultinomialNB()
+    classifier.fit(train_vectors, train_labels)
+    score_train = accuracy_score(train_labels, classifier.predict(train_vectors))
+    score_devel = accuracy_score(devel_labels, classifier.predict(devel_vectors))
 
-    # if not given, search for the best hyperparameter
-    if c == None:
-        print ("Evaluating the best hyperparameter C...")
-        hyperparameters = [2**i for i in range(-10, 10)]
-    else:
-        hyperparameters = [c]
-
-    for hyper in hyperparameters:
-        classifier = LinearSVC(C=hyper)
-        classifier.fit(train_vectors, train_labels)
-        score_train = accuracy_score(train_labels, classifier.predict(train_vectors))
-        score_devel = accuracy_score(devel_labels, classifier.predict(devel_vectors))
-        if score_devel > score_best:
-            c_best = hyper
-            score_best = score_devel
-            score_train = score_train
-            classifier_best = classifier
-        if len(hyperparameters) > 1:
-            print(f"If C = {hyper}, accuracy: {score_devel:.3f} (devel), {score_train:.3f} (training).")
-
-    print (f"For C value {c_best} the accuracy is {score_best:.3f} (devel), {score_train:.3f} (training).")
+    print (f"Accuracy: {score_devel:.3f} (devel set), {score_train:.3f} (training set).")
 
     # save the best classifier
     print ("Saving vectorizer and classifier...")
     joblib.dump(vectorizer, 'model/vectorizer.joblib')
-    joblib.dump(classifier_best, 'model/classifier.joblib')
+    joblib.dump(classifier, 'model/classifier.joblib')
     print ("Done.")
 
 if __name__ == "__main__":
-    if len(sys.argv) == 3:
-        limit = int(sys.argv[1])
-        param = float(sys.argv[2])
-        main(limit=limit, c=param)
-    elif len(sys.argv) == 2:
+    if len(sys.argv) == 2:
         main(limit=int(sys.argv[1]))
     else:
-        print("Usage: python train_classifier.py <class_max_length> <hyperparameter>")
+        print("Usage: python train_classifier.py <class_max_length>")
